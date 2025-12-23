@@ -2,32 +2,47 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OKINAWA TRAVEL PRO 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>OKINAWA TRAVEL 2026</title>
     
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/826/826070.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root { --muji-bg: #F5F5F7; --muji-blue: #0071C2; }
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--muji-bg); padding-bottom: 120px; scroll-behavior: smooth; }
+        body { 
+            font-family: 'Noto Sans TC', -apple-system, sans-serif; 
+            background-color: var(--muji-bg); 
+            padding-bottom: calc(130px + env(safe-area-inset-bottom)); 
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: white; border-radius: 1.5rem; border: 1px solid #E5E7EB; }
-        .nav-btn { color: #999; }
+        
+        .card { background: white; border-radius: 1.5rem; border: 1px solid #E5E7EB; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .nav-btn { color: #999; padding-bottom: env(safe-area-inset-bottom); transition: all 0.2s; }
         .btn-active { color: var(--muji-blue) !important; font-weight: 900; border-top: 3px solid var(--muji-blue); }
+        
+        input, select { font-size: 16px !important; outline: none; }
         .method-btn.active { border-color: var(--muji-blue); color: var(--muji-blue); background-color: #f0f9ff; }
-        .checkbox-item { display: flex; align-items: center; gap: 12px; padding: 15px; border-bottom: 1px solid #f3f4f6; }
+        
+        .checkbox-item { display: flex; align-items: center; gap: 12px; padding: 16px; border-bottom: 1px solid #f3f4f6; }
         .checkbox-item input[type="checkbox"] { width: 22px; height: 22px; border-radius: 6px; appearance: none; border: 2px solid #ddd; position: relative; flex-shrink: 0; }
         .checkbox-item input[type="checkbox"]:checked { background-color: var(--muji-blue); border-color: var(--muji-blue); }
         .checkbox-item input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 4px; top: -2px; font-weight: bold; }
         .checkbox-item input[type="checkbox"]:checked + span { text-decoration: line-through; color: #ccc; }
-        input, select { outline: none; }
+        
+        header { padding-top: env(safe-area-inset-top); }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased text-gray-800">
 
     <header class="bg-white/90 backdrop-blur-md border-b sticky top-0 z-50 px-6 py-4 text-center">
         <h1 class="text-xl font-black text-blue-700 italic tracking-tighter">OKINAWA 2026</h1>
@@ -37,26 +52,26 @@
         
         <section id="plan" class="tab-content active space-y-6">
             <div class="card p-5 border-2 border-blue-100 bg-blue-50/20 shadow-sm">
-                <p class="text-[10px] font-black text-blue-600 mb-3 uppercase tracking-widest"><i class="fas fa-plus-circle mr-1"></i> 新增行程</p>
+                <p class="text-[10px] font-black text-blue-600 mb-3 uppercase tracking-widest"><i class="fas fa-plus-circle mr-1"></i> 快速新增行程</p>
                 <div class="space-y-3">
                     <div class="flex gap-2">
                         <select id="edit-day" class="flex-1 bg-white border border-gray-200 rounded-xl p-3 text-sm font-bold"></select>
-                        <div class="flex-[1.5] flex items-center bg-white border border-gray-200 rounded-xl px-3">
-                            <select id="edit-hour" class="bg-transparent py-2 font-black"></select><span class="text-[10px] text-gray-400 mx-1">時</span>
-                            <select id="edit-min" class="bg-transparent py-2 font-black"></select><span class="text-[10px] text-gray-400 mx-1">分</span>
+                        <div class="flex-[1.5] flex items-center bg-white border border-gray-200 rounded-xl px-2">
+                            <select id="edit-hour" class="bg-transparent py-2 font-black"></select><span class="text-[10px] text-gray-400">時</span>
+                            <select id="edit-min" class="bg-transparent py-2 font-black"></select><span class="text-[10px] text-gray-400">分</span>
                         </div>
                     </div>
-                    <input type="text" id="edit-subject" placeholder="行程內容" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm font-bold">
-                    <input type="text" id="edit-location" placeholder="地點 (選填)" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm font-bold">
-                    <button onclick="addItineraryItem()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-sm">加入行程清單</button>
+                    <input type="text" id="edit-subject" placeholder="行程活動 (例: 美國村午餐)" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm font-bold">
+                    <input type="text" id="edit-location" placeholder="地點 (輸入地點名稱可導航)" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm font-bold">
+                    <button onclick="addItineraryItem()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-sm shadow-md">加入行程清單</button>
                 </div>
             </div>
 
             <div class="flex justify-between gap-2 sticky top-[80px] z-40 py-2">
-                <button onclick="scrollToDay(1)" class="flex-1 bg-white/80 py-2 rounded-xl shadow-sm font-black text-blue-700 text-xs">D1</button>
-                <button onclick="scrollToDay(2)" class="flex-1 bg-white/80 py-2 rounded-xl shadow-sm font-black text-blue-700 text-xs">D2</button>
-                <button onclick="scrollToDay(3)" class="flex-1 bg-white/80 py-2 rounded-xl shadow-sm font-black text-blue-700 text-xs">D3</button>
-                <button onclick="scrollToDay(4)" class="flex-1 bg-white/80 py-2 rounded-xl shadow-sm font-black text-blue-700 text-xs">D4</button>
+                <button onclick="scrollToDay(1)" class="flex-1 bg-white/90 py-2 rounded-xl border shadow-sm font-black text-blue-700 text-xs">D1</button>
+                <button onclick="scrollToDay(2)" class="flex-1 bg-white/90 py-2 rounded-xl border shadow-sm font-black text-blue-700 text-xs">D2</button>
+                <button onclick="scrollToDay(3)" class="flex-1 bg-white/90 py-2 rounded-xl border shadow-sm font-black text-blue-700 text-xs">D3</button>
+                <button onclick="scrollToDay(4)" class="flex-1 bg-white/90 py-2 rounded-xl border shadow-sm font-black text-blue-700 text-xs">D4</button>
             </div>
 
             <div id="itinerary-list" class="relative pl-8 space-y-6 border-l-2 border-blue-100 ml-4"></div>
@@ -64,10 +79,10 @@
 
         <section id="checklist" class="tab-content space-y-6">
             <div class="card p-6">
-                <h3 class="text-sm font-black text-blue-600 mb-4 tracking-widest uppercase"><i class="fas fa-briefcase mr-2"></i>行李準備</h3>
-                <div id="prep-container" class="space-y-2"></div>
+                <h3 class="text-sm font-black text-blue-600 mb-4 uppercase tracking-widest"><i class="fas fa-briefcase mr-2"></i>行李準備 (逐項核對)</h3>
+                <div id="prep-container"></div>
                 <div class="mt-6 flex gap-2">
-                    <input type="text" id="new-prep-text" placeholder="新增準備事項..." class="flex-1 bg-gray-100 rounded-xl p-3 text-sm">
+                    <input type="text" id="new-prep-text" placeholder="新增行李項目..." class="flex-1 bg-gray-100 rounded-xl p-3 text-sm">
                     <button onclick="addListItem('prep')" class="bg-blue-600 text-white px-4 rounded-xl font-black">+</button>
                 </div>
             </div>
@@ -75,10 +90,10 @@
 
         <section id="shopping" class="tab-content space-y-6">
             <div class="card p-6 border-t-4 border-t-orange-400">
-                <h3 class="text-sm font-black text-orange-600 mb-4 tracking-widest uppercase"><i class="fas fa-shopping-cart mr-2"></i>想買清單</h3>
-                <div id="shop-container" class="space-y-2"></div>
+                <h3 class="text-sm font-black text-orange-600 mb-4 uppercase tracking-widest"><i class="fas fa-shopping-cart mr-2"></i>想買清單 (採購用)</h3>
+                <div id="shop-container"></div>
                 <div class="mt-6 flex gap-2">
-                    <input type="text" id="new-shop-text" placeholder="新增購買項目..." class="flex-1 bg-gray-100 rounded-xl p-3 text-sm">
+                    <input type="text" id="new-shop-text" placeholder="新增購買商品..." class="flex-1 bg-gray-100 rounded-xl p-3 text-sm">
                     <button onclick="addListItem('shop')" class="bg-orange-500 text-white px-4 rounded-xl font-black">+</button>
                 </div>
             </div>
@@ -86,61 +101,92 @@
 
         <section id="wallet" class="tab-content space-y-6">
             <div class="grid grid-cols-3 gap-2 text-center">
-                <div class="bg-white p-3 py-4 rounded-2xl border border-gray-100 shadow-sm"><p class="text-[9px] font-bold text-gray-400 uppercase mb-1">現金 (NT)</p><p id="total-cash" class="text-sm font-black">0</p></div>
-                <div class="bg-white p-3 py-4 rounded-2xl border border-gray-100 shadow-sm"><p class="text-[9px] font-bold text-gray-400 uppercase mb-1">刷卡 (NT)</p><p id="total-card" class="text-sm font-black">0</p></div>
-                <div class="bg-blue-600 p-3 py-4 rounded-2xl shadow-sm text-white"><p class="text-[9px] font-bold opacity-70 uppercase mb-1">總計 (NT)</p><p id="total-all" class="text-sm font-black">0</p></div>
+                <div class="bg-white p-3 py-4 rounded-2xl border shadow-sm"><p class="text-[9px] font-bold text-gray-400">現金 (NT)</p><p id="total-cash" class="text-sm font-black">0</p></div>
+                <div class="bg-white p-3 py-4 rounded-2xl border shadow-sm"><p class="text-[9px] font-bold text-gray-400">刷卡 (NT)</p><p id="total-card" class="text-sm font-black">0</p></div>
+                <div class="bg-slate-800 p-3 py-4 rounded-2xl shadow-sm text-white"><p class="text-[9px] font-bold opacity-70 uppercase">總計支出</p><p id="total-all" class="text-sm font-black">0</p></div>
             </div>
 
             <div class="card p-6">
                 <div class="space-y-4">
-                    <select id="expense-date" class="w-full bg-gray-50 rounded-2xl p-4 font-bold"></select>
-                    <input type="text" id="expense-name" placeholder="項目內容 (例: 阿古豬午餐)" class="w-full bg-gray-50 rounded-2xl p-4 font-bold">
+                    <select id="expense-date" class="w-full bg-gray-50 rounded-2xl p-4 font-bold border-none"></select>
+                    <input type="text" id="expense-name" placeholder="消費內容 (例: 拉麵午餐)" class="w-full bg-gray-50 rounded-2xl p-4 font-bold border-none">
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="relative"><span class="absolute left-4 top-1 text-[8px] font-bold text-gray-400">JPY</span><input type="number" id="input-jpy" oninput="convertCurrency('jpy')" class="w-full bg-gray-50 rounded-2xl p-4 pt-6 font-black text-lg"></div>
-                        <div class="relative"><span class="absolute left-4 top-1 text-[8px] font-bold text-gray-400">TWD</span><input type="number" id="input-twd" oninput="convertCurrency('twd')" class="w-full bg-gray-50 rounded-2xl p-4 pt-6 font-black text-lg"></div>
+                        <div class="relative"><span class="absolute left-4 top-1 text-[8px] font-bold text-gray-400">JPY</span><input type="number" id="input-jpy" oninput="convertCurrency('jpy')" class="w-full bg-gray-50 rounded-2xl p-4 pt-6 font-black text-lg border-none"></div>
+                        <div class="relative"><span class="absolute left-4 top-1 text-[8px] font-bold text-gray-400">TWD</span><input type="number" id="input-twd" oninput="convertCurrency('twd')" class="w-full bg-gray-50 rounded-2xl p-4 pt-6 font-black text-lg border-none"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="setMethod('cash')" id="btn-cash" class="method-btn py-4 rounded-2xl border-2 border-gray-100 font-black flex flex-col items-center gap-1 active"><i class="fas fa-wallet"></i><span class="text-xs">現金</span></button>
-                        <button onclick="setMethod('card')" id="btn-card" class="method-btn py-4 rounded-2xl border-2 border-gray-100 font-black flex flex-col items-center gap-1"><i class="fas fa-credit-card"></i><span class="text-xs">刷卡</span></button>
+                        <button onclick="setMethod('cash')" id="btn-cash" class="method-btn py-4 rounded-2xl border-2 border-gray-100 font-black flex flex-col items-center gap-1 active"><i class="fas fa-wallet"></i><span class="text-xs">現金支付</span></button>
+                        <button onclick="setMethod('card')" id="btn-card" class="method-btn py-4 rounded-2xl border-2 border-gray-100 font-black flex flex-col items-center gap-1"><i class="fas fa-credit-card"></i><span class="text-xs">刷卡支付</span></button>
                     </div>
-                    <button onclick="saveExpense()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black">儲存紀錄</button>
+                    <button onclick="saveExpense()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg shadow-lg">儲存紀錄</button>
                 </div>
             </div>
-            <div id="expense-list" class="space-y-4"></div>
+            <div id="expense-list" class="space-y-3"></div>
+            <button onclick="clearExpenses()" class="w-full text-gray-400 text-[10px] py-4 uppercase font-bold tracking-widest">Clear All Records</button>
         </section>
-
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t px-4 py-4 flex justify-around items-center z-50 pb-10">
-        <button onclick="switchTab('plan')" class="nav-btn flex-1 flex flex-col items-center gap-1 btn-active"><i class="fas fa-calendar-alt text-xl"></i><span class="text-[10px] font-black">行程</span></button>
-        <button onclick="switchTab('checklist')" class="nav-btn flex-1 flex flex-col items-center gap-1"><i class="fas fa-check-square text-xl"></i><span class="text-[10px] font-black">準備</span></button>
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t px-4 py-2 flex justify-around items-center z-50">
+        <button onclick="switchTab('plan')" class="nav-btn flex-1 flex flex-col items-center gap-1 btn-active"><i class="fas fa-route text-xl"></i><span class="text-[10px] font-black">行程</span></button>
+        <button onclick="switchTab('checklist')" class="nav-btn flex-1 flex flex-col items-center gap-1"><i class="fas fa-suitcase text-xl"></i><span class="text-[10px] font-black">準備</span></button>
         <button onclick="switchTab('shopping')" class="nav-btn flex-1 flex flex-col items-center gap-1"><i class="fas fa-shopping-bag text-xl"></i><span class="text-[10px] font-black">購買</span></button>
-        <button onclick="switchTab('wallet')" class="nav-btn flex-1 flex flex-col items-center gap-1"><i class="fas fa-coins text-xl"></i><span class="text-[10px] font-black">帳目</span></button>
+        <button onclick="switchTab('wallet')" class="nav-btn flex-1 flex flex-col items-center gap-1"><i class="fas fa-yen-sign text-xl"></i><span class="text-[10px] font-black">帳目</span></button>
     </nav>
 
     <script>
         const EX_RATE = 0.21;
         const dayLabels = ["", "2026/03/10 週二 (D1)", "2026/03/11 週三 (D2)", "2026/03/12 週四 (D3)", "2026/03/13 週五 (D4)"];
         
+        // 載入資料
         let itinerary = JSON.parse(localStorage.getItem('oka26_itinerary')) || [];
-        let prepList = JSON.parse(localStorage.getItem('oka26_prep')) || [
-            { id: 1, text: "護照正本", checked: false }, { id: 2, text: "日幣現金", checked: false }, { id: 3, text: "小孩奶粉", checked: false }
-        ];
-        let shopList = JSON.parse(localStorage.getItem('oka26_shop')) || [
-            { id: 101, text: "合利他命", checked: false }
-        ];
+        // 重新整理：移除斜線、全細項獨立勾選、加入大人清單
+let prepList = JSON.parse(localStorage.getItem('oka26_prep')) || [
+    { id: 101, text: "【重要證件】護照正本", checked: false },
+    { id: 102, text: "【重要證件】國際駕照", checked: false },
+    { id: 103, text: "【重要證件】日幣現金", checked: false },
+    { id: 104, text: "【重要證件】JCB 信用卡", checked: false },
+    
+    { id: 201, text: "【大人衣物】上衣套數", checked: false },
+    { id: 202, text: "【大人衣物】下著套數", checked: false },
+    { id: 203, text: "【大人衣物】內衣褲", checked: false },
+    { id: 204, text: "【大人衣物】襪子", checked: false },
+    { id: 205, text: "【大人衣物】薄外套", checked: false },
+    { id: 206, text: "【大人個人】手機充電器", checked: false },
+    { id: 207, text: "【大人個人】行動電源", checked: false },
+    { id: 208, text: "【大人個人】盥洗用品保養品", checked: false },
+    { id: 209, text: "【大人個人】個人常備藥品", checked: false },
+
+    { id: 301, text: "【小孩食】奶粉分裝包", checked: false },
+    { id: 302, text: "【小孩食】拋棄式奶瓶", checked: false },
+    { id: 303, text: "【小孩食】常溫寶寶粥", checked: false },
+    { id: 304, text: "【小孩食】食物剪刀", checked: false },
+    { id: 305, text: "【小孩食】兒童餐具", checked: false },
+    { id: 306, text: "【小孩食】飛機用零食米餅", checked: false },
+    
+    { id: 401, text: "【小孩用品】尿布充足份量", checked: false },
+    { id: 402, text: "【小孩用品】濕紙巾", checked: false },
+    { id: 403, text: "【小孩用品】拋棄式尿布墊", checked: false },
+    { id: 404, text: "【小孩用品】兒童牙刷牙膏", checked: false },
+    
+    { id: 501, text: "【小孩醫藥】兒童耳溫槍", checked: false },
+    { id: 502, text: "【小孩醫藥】小兒退燒藥", checked: false },
+    { id: 503, text: "【小孩醫藥】感冒鼻水藥品", checked: false },
+    { id: 504, text: "【小孩醫藥】防蚊液", checked: false },
+    { id: 505, text: "【小孩醫藥】屁屁膏", checked: false },
+    
+    { id: 601, text: "【大型設備】輕便推車", checked: false },
+    { id: 602, text: "【大型設備】推車雨罩", checked: false },
+    { id: 603, text: "【大型設備】揹巾", checked: false }
+];
+        let shopList = JSON.parse(localStorage.getItem('oka26_shop')) || [];
         let selectedMethod = 'cash';
 
         function initApp() {
             const editDay = document.getElementById('edit-day');
             const expDate = document.getElementById('expense-date');
             dayLabels.forEach((l, i) => { if(i>0) { editDay.add(new Option(l, i)); expDate.add(new Option(l, l)); }});
-            
-            const hourSel = document.getElementById('edit-hour');
-            for(let i=0; i<24; i++) hourSel.add(new Option(i.toString().padStart(2,'0'), i.toString().padStart(2,'0')));
-            const minSel = document.getElementById('edit-min');
-            for(let i=0; i<60; i+=5) minSel.add(new Option(i.toString().padStart(2,'0'), i.toString().padStart(2,'0')));
-
+            for(let i=0; i<24; i++) document.getElementById('edit-hour').add(new Option(i.toString().padStart(2,'0'), i.toString().padStart(2,'0')));
+            for(let i=0; i<60; i+=5) document.getElementById('edit-min').add(new Option(i.toString().padStart(2,'0'), i.toString().padStart(2,'0')));
             renderAll();
         }
 
@@ -151,75 +197,91 @@
             renderExpenses();
         }
 
-        /* --- 行程管理 --- */
+        /* --- 行程模組 (含地圖按鈕) --- */
         function renderItinerary() {
             const container = document.getElementById('itinerary-list');
             container.innerHTML = '';
             itinerary.sort((a,b) => a.day - b.day || a.time.localeCompare(b.time));
 
             for (let d = 1; d <= 4; d++) {
-                container.innerHTML += `<h2 id="day-heading-${d}" class="text-lg font-black text-gray-900 pt-6 -ml-4 flex items-center bg-transparent"><span class="w-2 h-5 bg-blue-600 rounded-full mr-2"></span> Day ${d}</h2>`;
-                if (d === 1) container.innerHTML += renderFlightCard("去程航班 JTA NU302", "10:00 - 12:30", "桃園 → 那霸", "blue");
+                container.innerHTML += `<h2 id="day-heading-${d}" class="text-lg font-black text-gray-900 pt-8 -ml-4 flex items-center"><span class="w-2 h-5 bg-blue-600 rounded-full mr-2"></span> Day ${d}</h2>`;
                 
-                itinerary.filter(i => parseInt(i.day) === d).forEach((item) => {
+                // Day 1 去程
+                if (d === 1) container.innerHTML += renderFlightCard("去程航班 NU302", "10:00 - 12:30", "桃園 (TPE) → 那霸 (OKA)", "blue");
+                
+                // 行程項目
+                itinerary.filter(i => parseInt(i.day) === d).forEach(item => {
                     container.innerHTML += `
-                    <div class="card p-4 mb-3 relative border-l-4 border-l-gray-300">
+                    <div class="card p-4 mb-3 relative border-l-4 border-l-gray-300 shadow-sm">
                         <div class="flex justify-between items-start">
                             <span class="text-[10px] font-black text-blue-700 bg-blue-50 px-2 py-1 rounded-md">${item.time}</span>
                             <button onclick="deletePlan('${item.id}')" class="text-gray-200"><i class="fas fa-trash-alt text-xs"></i></button>
                         </div>
-                        <p class="font-bold text-gray-800 mt-2">${item.subject}</p>
-                        ${item.location ? `<p class="text-[10px] font-bold text-gray-400 mt-1 uppercase"><i class="fas fa-location-dot mr-1"></i>${item.location}</p>` : ''}
+                        <p class="font-bold text-gray-800 mt-2 text-md">${item.subject}</p>
+                        ${item.location ? `
+                            <div class="flex items-center justify-between mt-3">
+                                <p class="text-[10px] font-bold text-gray-400 truncate flex-1 mr-2"><i class="fas fa-map-marker-alt mr-1"></i>${item.location}</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location)}" target="_blank" class="bg-blue-50 text-blue-600 text-[10px] font-black px-3 py-1.5 rounded-lg flex items-center"><i class="fas fa-location-arrow mr-1"></i>導航</a>
+                            </div>
+                        ` : ''}
                     </div>`;
                 });
-                if (d === 4) container.innerHTML += renderFlightCard("回程航班 JTA NU301", "08:00 - 08:45", "那霸 → 桃園", "orange");
+
+                // Day 4 回程
+                if (d === 4) container.innerHTML += renderFlightCard("回程航班 NU301", "08:00 - 08:45", "那霸 (OKA) → 桃園 (TPE)", "orange");
             }
         }
 
         function renderFlightCard(title, time, route, color) {
             const c = color === 'blue' ? 'blue-600' : 'orange-500';
             const bg = color === 'blue' ? 'bg-blue-50/50' : 'bg-orange-50/50';
-            return `<div class="card p-4 mb-3 border-l-4 border-l-${c} ${bg}"><div class="flex justify-between items-center mb-1"><span class="text-[9px] font-black text-${c} uppercase">${title}</span><span class="text-[10px] font-bold text-${c}">${time}</span></div><p class="font-bold text-gray-700 text-sm">${route}</p></div>`;
+            return `<div class="card p-4 mb-3 border-l-4 border-l-${c} ${bg} shadow-sm"><div class="flex justify-between items-center mb-1"><span class="text-[9px] font-black text-${c} uppercase">${title}</span><span class="text-[10px] font-bold text-${c}">${time}</span></div><p class="font-bold text-gray-700 text-sm">${route}</p></div>`;
         }
 
         function addItineraryItem() {
-            const subject = document.getElementById('edit-subject').value;
-            if(!subject) return;
-            itinerary.push({
-                id: Date.now().toString(),
-                day: document.getElementById('edit-day').value,
-                time: `${document.getElementById('edit-hour').value}:${document.getElementById('edit-min').value}`,
-                subject: subject,
-                location: document.getElementById('edit-location').value
-            });
+            const sub = document.getElementById('edit-subject').value;
+            if(!sub) return;
+            itinerary.push({ id: Date.now().toString(), day: document.getElementById('edit-day').value, time: `${document.getElementById('edit-hour').value}:${document.getElementById('edit-min').value}`, subject: sub, location: document.getElementById('edit-location').value });
             localStorage.setItem('oka26_itinerary', JSON.stringify(itinerary));
             document.getElementById('edit-subject').value = '';
+            document.getElementById('edit-location').value = '';
             renderItinerary();
         }
 
-        /* --- 帳目功能 (回歸版本) --- */
-        function setMethod(m) {
-            selectedMethod = m;
-            document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${m}`).classList.add('active');
+        /* --- 清單模組 --- */
+        function renderList(type, data, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            data.forEach(item => {
+                container.innerHTML += `<div class="checkbox-item"><input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleList('${type}', ${item.id})"><span class="text-sm font-bold text-gray-700 flex-1">${item.text}</span><button onclick="removeListItem('${type}', ${item.id})" class="text-gray-200 p-2"><i class="fas fa-times text-xs"></i></button></div>`;
+            });
         }
 
+        function addListItem(type) {
+            const input = document.getElementById(`new-${type}-text`);
+            if(!input.value) return;
+            const newItem = { id: Date.now(), text: input.value, checked: false };
+            if(type === 'prep') { prepList.push(newItem); localStorage.setItem('oka26_prep', JSON.stringify(prepList)); }
+            else { shopList.push(newItem); localStorage.setItem('oka26_shop', JSON.stringify(shopList)); }
+            input.value = ''; renderAll();
+        }
+
+        /* --- 記帳模組 (回歸版) --- */
+        function setMethod(m) { selectedMethod = m; document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active')); document.getElementById(`btn-${m}`).classList.add('active'); }
         function convertCurrency(type) {
             const j = document.getElementById('input-jpy'), t = document.getElementById('input-twd');
             if(type==='jpy') t.value = j.value ? Math.round(j.value * EX_RATE) : '';
             else j.value = t.value ? Math.round(t.value / EX_RATE) : '';
         }
-
         function saveExpense() {
-            const date = document.getElementById('expense-date').value, name = document.getElementById('expense-name').value || "旅遊支出";
-            const jpy = document.getElementById('input-jpy').value, twd = document.getElementById('input-twd').value;
-            if(!jpy) return;
+            const j = document.getElementById('input-jpy').value;
+            if(!j) { alert("請輸入金額"); return; }
             let ex = JSON.parse(localStorage.getItem('okina_expenses')) || [];
-            ex.unshift({ id: Date.now(), date, name, jpy: parseInt(jpy), twd: parseInt(twd), method: selectedMethod, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}) });
+            ex.unshift({ id: Date.now(), date: document.getElementById('expense-date').value, name: document.getElementById('expense-name').value || "旅遊支出", jpy: parseInt(j), twd: parseInt(document.getElementById('input-twd').value), method: selectedMethod, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false}) });
             localStorage.setItem('okina_expenses', JSON.stringify(ex));
-            document.getElementById('expense-name').value = ''; document.getElementById('input-jpy').value = ''; document.getElementById('input-twd').value = '';
+            document.getElementById('input-jpy').value = ''; document.getElementById('input-twd').value = ''; document.getElementById('expense-name').value = '';
             renderExpenses();
-            alert("已儲存紀錄");
+            alert("記帳成功！");
         }
 
         function renderExpenses() {
@@ -234,14 +296,13 @@
             
             ex.forEach(e => {
                 list.innerHTML += `
-                <div class="card p-4 flex justify-between items-center bg-white shadow-sm">
+                <div class="card p-4 flex justify-between items-center bg-white shadow-sm border-l-4 ${e.method === 'cash' ? 'border-l-orange-400' : 'border-l-blue-400'}">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1">
                             <span class="text-[9px] font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded">${e.name}</span>
-                            <span class="text-[8px] font-bold text-gray-300 font-mono">${e.date.split(' ')[0]} ${e.time}</span>
+                            <span class="text-[8px] font-bold text-gray-300 font-mono">${e.date.split(' ')[0]}</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            ${e.method === 'cash' ? '<i class="fas fa-wallet text-orange-400 text-xs"></i>' : '<i class="fas fa-credit-card text-blue-400 text-xs"></i>'}
                             <span class="text-md font-black">¥${e.jpy.toLocaleString()}</span>
                             <span class="text-[10px] font-bold text-gray-400">/ NT$${e.twd.toLocaleString()}</span>
                         </div>
@@ -251,32 +312,7 @@
             });
         }
 
-        /* --- 清單與切換功能 --- */
-        function renderList(type, data, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            data.forEach(item => {
-                container.innerHTML += `<div class="checkbox-item"><input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleList('${type}', ${item.id})"><span class="text-sm font-bold text-gray-700 flex-1">${item.text}</span><button onclick="removeListItem('${type}', ${item.id})" class="text-gray-200"><i class="fas fa-times text-xs"></i></button></div>`;
-            });
-        }
-        function addListItem(type) {
-            const input = document.getElementById(`new-${type}-text`);
-            if(!input.value) return;
-            const newItem = { id: Date.now(), text: input.value, checked: false };
-            if(type === 'prep') { prepList.push(newItem); localStorage.setItem('oka26_prep', JSON.stringify(prepList)); }
-            else { shopList.push(newItem); localStorage.setItem('oka26_shop', JSON.stringify(shopList)); }
-            input.value = ''; renderAll();
-        }
-        function toggleList(type, id) {
-            if(type === 'prep') { prepList = prepList.map(i => i.id === id ? {...i, checked: !i.checked} : i); localStorage.setItem('oka26_prep', JSON.stringify(prepList)); }
-            else { shopList = shopList.map(i => i.id === id ? {...i, checked: !i.checked} : i); localStorage.setItem('oka26_shop', JSON.stringify(shopList)); }
-            renderAll();
-        }
-        function removeListItem(type, id) {
-            if(type === 'prep') { prepList = prepList.filter(i => i.id !== id); localStorage.setItem('oka26_prep', JSON.stringify(prepList)); }
-            else { shopList = shopList.filter(i => i.id !== id); localStorage.setItem('oka26_shop', JSON.stringify(shopList)); }
-            renderAll();
-        }
+        /* --- 基礎功能 --- */
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -285,12 +321,25 @@
             if(target) target.classList.add('btn-active');
             window.scrollTo(0,0);
         }
+
         function scrollToDay(d) {
             const el = document.getElementById(`day-heading-${d}`);
             if(el) window.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' });
         }
-        function deletePlan(id) { if(confirm('刪除行程？')){ itinerary = itinerary.filter(i => i.id !== id); localStorage.setItem('oka26_itinerary', JSON.stringify(itinerary)); renderItinerary(); }}
-        function delExp(id) { if(confirm('刪除紀錄？')){ let ex = JSON.parse(localStorage.getItem('okina_expenses')) || []; localStorage.setItem('okina_expenses', JSON.stringify(ex.filter(e => e.id !== id))); renderExpenses(); }}
+
+        function toggleList(t, id) { 
+            if(t==='prep') prepList = prepList.map(i => i.id===id?{...i,checked:!i.checked}:i);
+            else shopList = shopList.map(i => i.id===id?{...i,checked:!i.checked}:i);
+            localStorage.setItem('oka26_'+t, JSON.stringify(t==='prep'?prepList:shopList)); renderAll();
+        }
+        function deletePlan(id) { if(confirm('刪除此行程？')){ itinerary = itinerary.filter(i => i.id !== id); localStorage.setItem('oka26_itinerary', JSON.stringify(itinerary)); renderItinerary(); }}
+        function delExp(id) { if(confirm('刪除此筆記帳？')){ let ex = JSON.parse(localStorage.getItem('okina_expenses')) || []; localStorage.setItem('okina_expenses', JSON.stringify(ex.filter(e => e.id !== id))); renderExpenses(); }}
+        function removeListItem(t, id) { 
+            if(t==='prep') prepList = prepList.filter(i => i.id !== id);
+            else shopList = shopList.filter(i => i.id !== id);
+            localStorage.setItem('oka26_'+t, JSON.stringify(t==='prep'?prepList:shopList)); renderAll();
+        }
+        function clearExpenses() { if(confirm('確定要清空所有帳目紀錄嗎？')){ localStorage.removeItem('okina_expenses'); renderExpenses(); }}
 
         window.onload = initApp;
     </script>
